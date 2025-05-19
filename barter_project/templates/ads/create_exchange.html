@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Предложить обмен{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-arrow-repeat me-2"></i>Предложение обмена
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Ваш товар:</h5>
+                                    {% include 'ads/_ad_card.html' with ad=user_ads %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Выберите товар для обмена:</h5>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Товар получателя</label>
+                                            {{ form.receiver_ad }}
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Комментарий</label>
+                                            {{ form.comment }}
+                                        </div>
+                                        
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-send-check"></i> Отправить предложение
+                                            </button>
+                                            <a href="{% url 'ad_detail' user.id %}" 
+                                               class="btn btn-secondary">
+                                                Отмена
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

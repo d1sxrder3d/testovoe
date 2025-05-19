@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Вкладки -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="#received" data-bs-toggle="tab">Входящие</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#sent" data-bs-toggle="tab">Исходящие</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Входящие предложения -->
+        <div class="tab-pane active" id="received">
+            {% for proposal in received_proposals %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Ваш товар:</h5>
+                            {% include 'ads/_ad_card.html' with ad=proposal.receiver_ad %}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Предлагаемый товар:</h5>
+                            {% include 'ads/_ad_card.html' with ad=proposal.sender_ad %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid gap-2">
+                                {% if proposal.status == 'pending' %}
+                                <a href="{% url 'accept_exchange' proposal.id %}" 
+                                   class="btn btn-success">Принять</a>
+                                <a href="{% url 'reject_exchange' proposal.id %}" 
+                                   class="btn btn-danger">Отклонить</a>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ proposal.get_status_display }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Исходящие предложения -->
+        <div class="tab-pane" id="sent">
+            {% for proposal in sent_proposals %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Ваш товар:</h5>
+                            {% include 'ads/_ad_card.html' with ad=proposal.sender_ad %}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Желаемый товар:</h5>
+                            {% include 'ads/_ad_card.html' with ad=proposal.receiver_ad %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex flex-column">
+                                <span class="badge bg-info mb-2">{{ proposal.get_status_display }}</span>
+                                {% if proposal.status == 'pending' %}
+                                <a href="{% url 'cancel_exchange' proposal.id %}" 
+                                   class="btn btn-warning">Отозвать</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ ad.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <!-- Картинка объявления -->
+                {% if ad.image_url %}
+                <img src="{{ ad.image_url }}" 
+                     class="card-img-top" 
+                     alt="{{ ad.title }}"
+                     style="max-height: 500px; object-fit: cover;">
+                {% endif %}
+                
+                <div class="card-body">
+                    <!-- Заголовок и информация -->
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <h1 class="card-title display-5">{{ ad.title }}</h1>
+                        <span class="badge bg-primary fs-6">{{ ad.get_condition_display }}</span>
+                    </div>
+                    
+                    <!-- Описание -->
+                    <div class="mb-4">
+                        <p class="lead">{{ ad.description }}</p>
+                    </div>
+                    
+                    <!-- Кнопка "Предложить обмен" -->
+                    {% if user.is_authenticated and user != ad.user %}
+                    <div class="mb-4 text-center">
+                        <a href="{% url 'create_exchange' ad.id %}" 
+                           class="btn btn-primary btn-lg">
+                           <i class="bi bi-arrow-repeat"></i> Предложить обмен
+                        </a>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Блоки с информацией -->
+                    <div class="row g-3 mb-4">
+                        <!-- ... остальной контент ... -->
+                    </div>
+                    
+                    <!-- Кнопки управления -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- ... остальные кнопки ... -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

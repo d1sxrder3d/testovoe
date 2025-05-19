@@ -1,0 +1,21 @@
+<div class="ad-card">
+    {% if ad.image_url %}
+    <img src="{{ ad.image_url }}" 
+         class="card-img-top mb-2" 
+         alt="{{ ad.title }}"
+         style="height: 150px; object-fit: cover;">
+    {% endif %}
+    <h6 class="card-title">{{ ad.title }}</h6>
+    <div class="card-text small">
+        <div class="mb-1 text-muted">
+            <i class="bi bi-person"></i> {{ ad.user.username }}
+        </div>
+        <div class="mb-1">
+            <span class="badge bg-primary">{{ ad.category }}</span>
+            <span class="badge bg-secondary">{{ ad.get_condition_display }}</span>
+        </div>
+        <div class="text-muted small">
+            <i class="bi bi-clock"></i> {{ ad.created_at|date:"d M Y" }}
+        </div>
+    </div>      
+</div>

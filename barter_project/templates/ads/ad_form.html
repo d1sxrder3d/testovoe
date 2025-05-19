@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Редактирование{% else %}Создание{% endif %} объявления{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        {% if object %}Редактирование{% else %}Новое{% endif %} объявление
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            {% for field in form %}
+                            <div class="col-12">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                            
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{% if object %}{% url 'ad_detail' object.id %}{% else %}{% url 'ad_list' %}{% endif %}" 
+                                       class="btn btn-secondary">
+                                        Отмена
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        Сохранить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% comment %} юзлес щас, мб потом переделаю под это {% endcomment %}

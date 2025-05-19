@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мои объявления{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Форма создания -->
+    <div class="card mb-5 shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Создать новое объявление</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Заголовок</label>
+                        {{ form.title }}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Категория</label>
+                        {{ form.category }}
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label">Описание</label>
+                        {{ form.description }}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Состояние</label>
+                        {{ form.condition }}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Изображение (URL)</label>
+                        {{ form.image_url }}
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success w-100 py-2">
+                            <i class="bi bi-plus-circle"></i> Опубликовать
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Список объявлений -->
+    <h3 class="mb-4">Мои активные объявления</h3>
+    
+    {% if ads %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for ad in ads %}
+        <div class="col">
+            <div class="card h-100 shadow">
+                {% if ad.image_url %}
+                <img src="{{ ad.image_url }}" 
+                     class="card-img-top" 
+                     alt="{{ ad.title }}"
+                     style="height: 200px; object-fit: cover;">
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">{{ ad.title }}</h5>
+                        <span class="badge bg-secondary">{{ ad.get_condition_display }}</span>
+                    </div>
+                    
+                    <p class="card-text text-muted">{{ ad.description|truncatechars:100 }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            {{ ad.created_at|date:"d M Y H:i" }}
+                        </small>
+                        <div class="btn-group">
+                            <a href="{% url 'ad_edit' ad.id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'ad_delete' ad.id %}" 
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        У вас пока нет активных объявлений
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
